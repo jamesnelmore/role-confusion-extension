@@ -1,0 +1,3 @@
+[submodule "vendor/role-confusion"]
+	path = vendor/role-confusion
+	url = https://github.com/role-confusion/prompt-injection-as-role-confusion.git

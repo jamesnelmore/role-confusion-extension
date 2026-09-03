@@ -4,6 +4,8 @@
 .venv/
 __pycache__/
 *.pyc
-results/*.json
-results/*.jsonl
+results/
 data/pages.jsonl
+data/role_pairs.jsonl
+data/steering_vectors.pt
+logs/

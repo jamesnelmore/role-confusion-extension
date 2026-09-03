@@ -113,7 +113,6 @@ def build(n, seed=1234):
     import yaml
     cfg = yaml.safe_load((HERE.parent / "prompts" / "injections.yaml").read_text())
     base = [i["prompt"].strip() for i in cfg["base_injections"]]
-    forgery = [i["prompt"].strip() for i in cfg["prompt_injections"]]
 
     raw = fetch_random_wikipedia(n, seed=seed)
     random.seed(seed)
@@ -124,14 +123,11 @@ def build(n, seed=1234):
         rows.append({"id": f"{p['idx']:03d}__base-injection", "idx": p["idx"],
                      "variant": "base-injection", "title": p["title"],
                      "html": inject(p["html"], random.choice(base))})
-        rows.append({"id": f"{p['idx']:03d}__cot-forgery-injection", "idx": p["idx"],
-                     "variant": "cot-forgery-injection", "title": p["title"],
-                     "html": inject(p["html"], random.choice(forgery))})
     out = HERE / "pages.jsonl"
     with open(out, "w") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
-    print(f"\nWrote {len(rows)} pages ({len(raw)} articles x 3 variants) to {out}")
+    print(f"\nWrote {len(rows)} pages ({len(raw)} articles x 2 variants) to {out}")
 
 
 if __name__ == "__main__":
