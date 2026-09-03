@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+results/*.json
+results/*.jsonl
+data/pages.jsonl
