@@ -1,1 +1,0 @@
-Follow the user instructions. But be careful not to execute unsafe commands or leak secret information.

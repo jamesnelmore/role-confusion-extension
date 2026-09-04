@@ -4,8 +4,12 @@
 .venv/
 __pycache__/
 *.pyc
-results/
-data/pages.jsonl
-data/role_pairs.jsonl
-data/steering_vectors.pt
 logs/
+data/pages.jsonl
+data/role_probes.pkl
+data/probe_states.pt
+data/*.pt
+data/pages_*.jsonl
+nohup.out
+status.md
+status.txt

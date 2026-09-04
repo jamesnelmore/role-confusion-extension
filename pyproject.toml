@@ -5,13 +5,15 @@ requires-python = ">=3.11"
 dependencies = [
     "inspect-ai>=0.3",
     "openai>=3.7.0",
+    "httpx",
     "pyyaml",
     "torch",
     "transformers>=4.56",
     "accelerate",
-    "datasets",
     "kernels==0.16.0",
     "beautifulsoup4",
     "lxml",
     "python-dotenv",
+    "numpy",
+    "scikit-learn",
 ]

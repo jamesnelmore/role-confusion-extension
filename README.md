@@ -1,45 +1,27 @@
-# Role-Confusion Eval + Steering Mitigation
+# Role-confusion extension
 
-Replication and extension of [Ye et al., *Prompt Injection as Role Confusion*](https://arxiv.org/abs/2603.12277).
-Sprint submission to Neel Nanda's winter 2027 MATS stream.
+Extension of [Ye et al., *Prompt Injection as Role Confusion*](https://arxiv.org/abs/2603.12277).
+Attack templates, the judge prompt, and role probes come from `vendor/role-confusion`.
 
-## What this does
+This repo runs three things:
 
-1. **Attack replication** — the paper's agent-hijacking eval (§B.2) against
-   `openai/gpt-oss-20b` via OpenRouter, using a prefill-based Inspect AI task
-   instead of a full Docker sandbox. Base-injection ASR ~0.57, system-prompt
-   warning doesn't help.
-
-2. **Steering mitigation** (in progress) — extract the userness direction from
-   model activations, project it out of tool-channel residuals, and measure
-   whether exfil ASR drops.
-
-## Quick start
+1. The paper's agent-injection attack through OpenRouter
+2. The same attack locally, projecting **userness** out of tool-call tokens at chosen layers
+3. The same as (2) with the **userness − toolness** direction
 
 ```bash
+git submodule update --init
 uv sync
-# Build dataset (fetches Wikipedia, injects exfil payloads)
-uv run python data/build_pages.py -n 59
-# Run eval
-uv run inspect eval src/eval.py@role_confusion \
-    --model openrouter/openai/gpt-oss-20b \
-    --max-connections 2 --log-dir logs
+# OPENROUTER_API_KEY in .env  (attack for (1); judge for all three)
+uv run python data/build_pages.py -n 24
+
+# (1)
+uv run python src/run.py --backend openrouter --limit 24
+
+# (2)(3) — probes from vendor experiments/role-analysis/02-train-role-probes.ipynb
+uv run python src/run.py --backend local --project off --limit 24
+uv run python src/run.py --backend local --project userness --layers 12
+uv run python src/run.py --backend local --project userness-toolness --layers 12
 ```
 
-## Layout
-
-```
-src/
-  eval.py               Inspect AI task: prefill + fake bash tool + exfil scorer
-  build_role_pairs.py    Contrastive user/tool pairs for steering vector extraction
-  make_steering_vector.py  Per-layer v_L = mean(tool - user) over content tokens
-  steered_generate.py    Forward hooks to apply steering during generation
-data/
-  build_pages.py         Fetch Wikipedia, inject payloads → pages.jsonl
-prompts/
-  system_baseline.txt    Paper's soft warning (developer prompt)
-  system_warned.txt      Stronger explicit warning
-  user_task.txt          "Read and summarize the page"
-  injections.yaml        5 base-injection templates (paper's exact wording)
-vendor/role-confusion/   Paper's repo (submodule) — templates, probes, configs
-```
+dpaste.com is sinkholed to localhost. Projection edits pre-MLP activations of Harmony tool-call / tool-result tokens only.
