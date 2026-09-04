@@ -6,12 +6,12 @@ dependencies = [
     "inspect-ai>=0.3",
     "openai>=3.7.0",
     "pyyaml",
-]
-
-[project.optional-dependencies]
-steering = [
     "torch",
     "transformers>=4.56",
     "accelerate",
     "datasets",
+    "kernels==0.16.0",
+    "beautifulsoup4",
+    "lxml",
+    "python-dotenv",
 ]
