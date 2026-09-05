@@ -223,7 +223,7 @@ class SteeredHuggingFaceAPI(ModelAPI):
         ctx = contextlib.nullcontext()
         if self.project != "off":
             pos = tool_token_indices(self.tokenizer, prompt)
-            print(f"[local] tool tokens {len(pos)}/{n_in}", file=sys.stderr, flush=True)
+            # progress.py watches scored samples; this is too noisy for tail -f
             ctx = project_tool_tokens(self.model, self.vectors, self.layers, pos)
         try:
             with ctx:

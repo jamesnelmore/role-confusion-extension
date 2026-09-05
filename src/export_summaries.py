@@ -19,7 +19,7 @@ from eval import isolated_summary  # noqa: E402
 
 def summaries_from_dir(log_dir: pathlib.Path) -> list[dict]:
     rows: list[dict] = []
-    for path in sorted(log_dir.glob("*.eval")):
+    for path in sorted(log_dir.glob("*.eval")) or sorted(log_dir.rglob("*.eval")):
         log = read_eval_log(str(path))
         for s in log.samples or []:
             sc = s.scores.get("exfil_asr") if s.scores else None
