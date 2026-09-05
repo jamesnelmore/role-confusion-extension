@@ -19,4 +19,5 @@ dependencies = [
     "matplotlib>=3.11.1",
     "scipy>=1.17.1",
     "marimo>=0.24.0",
+    "nbformat>=5.11.1",
 ]

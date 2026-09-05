@@ -71,7 +71,9 @@ def status_cell(S, local_n, local_ready, mo, n48, raw):
         _inv.append(f"| {_title} | {len(raw[_name])} | {len(n48[_name])} |")
     status = mo.md("\n".join(_lines + _inv))
     verdict = mo.md(S.verdict_md(n48, local_ready))
-    return status, verdict
+    mo.output.append(status)
+    mo.output.append(verdict)
+    return
 
 
 @app.cell
@@ -107,11 +109,13 @@ def asr_bars(S, local_ready, mo, n48, plt):
         "Clean arms stay at 0. If local off sits with L12 / L12plus, "
         "projection did not change ASR; OpenRouter is a different stack."
     )
-    return asr_note, fig_asr
+    mo.output.append(fig_asr)
+    mo.output.append(asr_note)
+    return
 
 
 @app.cell
-def label_bars(S, n48, np, plt):
+def label_bars(S, mo, n48, np, plt):
     _names = [
         n for n in (
             "or_inj", "local_off_inj", "l12_inj", "l12p_inj",
@@ -138,7 +142,8 @@ def label_bars(S, n48, np, plt):
     _lax.set_title("Judge labels")
     _lax.legend(frameon=False, loc="upper right", fontsize=8)
     fig_labels.tight_layout()
-    return (fig_labels,)
+    mo.output.append(fig_labels)
+    return
 
 
 @app.cell
@@ -213,7 +218,7 @@ def tests_md(S, local_ready, mo, n48, pairwise, raw):
             f"(H₀: P(clean better) = 1/2)",
         ]
     tests = mo.md("\n".join(_body))
-    return (tests,)
+    return
 
 
 @app.cell
@@ -260,7 +265,7 @@ def discord_bars(S, local_ready, n48, plt, raw):
         if _dax is _daxes[1]:
             _dax.legend(frameon=False, fontsize=8, loc="lower right")
     fig_discord.tight_layout()
-    return (fig_discord,)
+    return
 
 
 @app.cell
@@ -291,7 +296,7 @@ def article_matrix(S, n48, np, plt):
     fig_matrix.colorbar(_im, ax=_mx, fraction=0.04, pad=0.02, ticks=[0, 1],
                         label="judge ASR")
     fig_matrix.tight_layout()
-    return (fig_matrix,)
+    return
 
 
 @app.cell
@@ -312,7 +317,7 @@ def pairwise_fig(mo, pairwise, plt):
         _pax.set_title(f"Dirty pairwise  ·  OpenRouter  ·  N={sum(_pvals)}")
         _pax.set_ylabel("articles")
         fig_pair.tight_layout()
-    return (fig_pair,)
+    return
 
 
 @app.cell
@@ -340,7 +345,7 @@ def caveats_cell(S, local_n, local_ready, mo):
         "Re-run: `uv run marimo export html notebooks/results.py "
         "-o notebooks/results.html -f`",
     ]))
-    return (caveats,)
+    return
 
 
 if __name__ == "__main__":
